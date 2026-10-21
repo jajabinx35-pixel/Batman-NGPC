@@ -1,0 +1,24 @@
+{
+  "manual_trim_mm": [
+    81,
+    110
+  ],
+  "manual_pages": 16,
+  "booklet_sheets": 4,
+  "booklet_print_pdf_pages": 8,
+  "case_wrap_trim_mm": [
+    230,
+    116
+  ],
+  "case_panel_widths_mm": [
+    105,
+    20,
+    105
+  ],
+  "case_bleed_mm": 3,
+  "manual_bleed_mm": 0,
+  "manual_size_basis": "Measured original PAL SNK vs. Capcom manual PDF: page widths 80.518-81.026 mm and heights 109.432-109.813 mm for first four pages; nominal trim rounded to 81 x 110 mm. Not a universal manufacturer specification for every regional manual.",
+  "manual_reference": "https://www.gamingalexandria.com/wp/2025/12/snk-vs-capcom-the-match-of-the-millennium/",
+  "case_reference": "https://www.gamopat-forum.com/t49219-inserts-neo-geo-pockets-dimensions",
+  "original_art": "User-supplied 258144.jpg; game-native stage captures. No newly imagined Batman illustration."
+}

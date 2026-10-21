@@ -1,4 +1,18 @@
-**/*.o
-**/gameloader
+# Independently licensed compiler and local binary tools
+SOURCE/T900/
+SOURCE/tools/wibo-compat
+SOURCE/tools/.wibo-compat*
+# Local outputs
+OUTPUT/
+SOURCE/OUTPUT/
+SOURCE/BUILD/
+SOURCE/EVIDENCE/
+EVIDENCE/
+WINDOWS_BUILD_LOG.txt
+.windows-build.lock
+*.tmp
+*.log
+__pycache__/
+*.pyc
 .DS_Store
-**/bin
+Thumbs.db

@@ -1,0 +1,75 @@
+/*
+ * ngpc.lcf - NGPC linker configuration (TLCS-900)
+ *
+ * Part of NgpCraft_base_template (MIT License)
+ *
+ * Notes:
+ * - Section names follow cc900 conventions: f_header/f_const/f_code/f_data/f_area.
+ * - f_data is stored in ROM (org=...) and relocated to RAM at runtime (addr=...).
+ */
+
+memory
+{
+    io(RW)  : org=0x000000, len=0x000100
+    ram(RW) : org=0x004000, len=0x002b60
+    graphics_ram(RW) : org=0x006b60, len=0x0000a0
+    audio_ram(RW) : org=0x007000, len=0x000200
+    stage_ram(RW) : org=0x007600, len=0x000200
+    rom(RX)  : org=0x200000, len=0x200000
+    sound_rom(RX) : org=0x800000, len=0x200000
+}
+
+sections
+{
+    far_area    org=0x004000                                  : {*(f_area)}
+    far_startup org=0x200000                                  : {*(f_header)}
+    far_const   org=org(far_startup)+sizeof(far_startup)      : {*(f_const)}
+    far_code    org=org(far_const)+sizeof(far_const)          : {*(f_code)}
+    far_data    org=org(far_code)+sizeof(far_code)
+                addr=org(far_area)+sizeof(far_area)           : {*(f_data)}
+
+    /* Keep any mini_const data in the first 2MB ROM, before the reserved save block.
+       Linker relocation updates all references; the S24 converter still validates bounds. */
+    mini_const  org=org(far_data)+sizeof(far_data)             : {*(mini_const)}
+
+    /* Run the decoder from the otherwise unused Z80 RAM. The Z80 is halted.
+       71F0..71FF is a per-block 16-byte lookup, not executable storage. */
+    PCM_NATIVE org=org(mini_const)+sizeof(mini_const)
+               addr=0x007000 : {*(PCM_NATIVE) *(MUL16) *(VRAMQ_ASM) *(NATIVE_MAP)}
+    __PcmROM_START = org(PCM_NATIVE);
+    __PcmROM_END = org(PCM_NATIVE)+sizeof(PCM_NATIVE);
+    /* All three stages use the same 512-byte RAM execution window. Only
+       their ROM images coexist; reset installs the appropriate image. */
+    FAST_AXIS org=org(PCM_NATIVE)+sizeof(PCM_NATIVE) addr=0x7600 (OVERLAY) : {*(FAST_AXIS)}
+    FAST_CAT org=org(FAST_AXIS)+sizeof(FAST_AXIS) addr=0x7600 (OVERLAY) : {*(FAST_CAT)}
+    FAST_VEH org=org(FAST_CAT)+sizeof(FAST_CAT) addr=0x7600 (OVERLAY) : {*(FAST_VEH)}
+    __FastAxisROM_START=org(FAST_AXIS); __FastAxisROM_END=org(FAST_AXIS)+sizeof(FAST_AXIS);
+    __FastCatROM_START=org(FAST_CAT); __FastCatROM_END=org(FAST_CAT)+sizeof(FAST_CAT);
+    __FastVehROM_START=org(FAST_VEH); __FastVehROM_END=org(FAST_VEH)+sizeof(FAST_VEH);
+    GRAPHICS_DIFF org=org(FAST_VEH)+sizeof(FAST_VEH) addr=0x6b60 : {*(GRAPHICS_DIFF)}
+    __GraphicsROM_START=org(GRAPHICS_DIFF); __GraphicsROM_END=org(GRAPHICS_DIFF)+sizeof(GRAPHICS_DIFF);
+    RAM_CLEAR org=org(GRAPHICS_DIFF)+sizeof(GRAPHICS_DIFF) addr=0x77c0 : {*(RAM_CLEAR)}
+    __ClearROM_START=org(RAM_CLEAR); __ClearROM_END=org(RAM_CLEAR)+sizeof(RAM_CLEAR);
+    ROM_ASM org=org(RAM_CLEAR)+sizeof(RAM_CLEAR) : {
+        *(FLASH) *(SYSPATCH) *(SPEED) *(ROWS) *(STAMP) *(ROAD_NATIVE) *(FRAME_STAMP) *(EDGE_PROFILE) *(MIDPOINT_ROWS) *(VEHICLE_ROWS) *(BACKGROUND_ROWS)
+    }
+
+
+    PLATFORM_SCAN org=org(ROM_ASM)+sizeof(ROM_ASM) addr=_render_work+0xa00 (OVERLAY) : {*(platform_scan)}
+    __PlatformScanROM_START=org(PLATFORM_SCAN); __PlatformScanROM_END=org(PLATFORM_SCAN)+sizeof(PLATFORM_SCAN);
+    NATIVE_KERNEL org=org(PLATFORM_SCAN)+sizeof(PLATFORM_SCAN) addr=_render_work+4544 (OVERLAY) : {*(EDGE_PIXELS) *(EDGE_ALL)}
+    __NativeKernelROM_START=org(NATIVE_KERNEL); __NativeKernelROM_END=org(NATIVE_KERNEL)+sizeof(NATIVE_KERNEL);
+    sound_const org=0x800000 : {*(sound_const)}
+    intro_audio org=org(sound_const)+sizeof(sound_const) : {*(intro_audio)}
+
+    ending_images org=org(intro_audio)+sizeof(intro_audio) : {*(ending_assets)}
+
+    /* Runtime copy/clear symbols used by ngpc_sys.c bootstrap. */
+    __DataROM_START = org(far_data);
+    __DataROM_END   = org(far_data)+sizeof(far_data);
+    __DataRAM_START = addr(far_data);
+    __Bss_START     = org(far_area);
+    __Bss_END       = org(far_area)+sizeof(far_area);
+
+    __DataRAM = addr(far_data);
+}

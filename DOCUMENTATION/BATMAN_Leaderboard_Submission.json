@@ -1,0 +1,169 @@
+{
+  "gameName": "Batman: The Movie NGPC",
+  "gameCode": "BATMAN",
+  "payloadFields": [
+    {
+      "name": "gameCode",
+      "width": "6",
+      "format": "fixed BATMAN",
+      "notes": ""
+    },
+    {
+      "name": "version",
+      "width": "1",
+      "format": "fixed 2",
+      "notes": ""
+    },
+    {
+      "name": "initials",
+      "width": "3",
+      "format": "A-Z",
+      "notes": ""
+    },
+    {
+      "name": "score",
+      "width": "7",
+      "format": "zero-padded decimal,1..999999",
+      "notes": ""
+    },
+    {
+      "name": "sourcePoints",
+      "width": "7",
+      "format": "zero-padded decimal,0..999999",
+      "notes": ""
+    },
+    {
+      "name": "totalTicks",
+      "width": "7",
+      "format": "zero-padded decimal,1..9999999",
+      "notes": ""
+    },
+    {
+      "name": "completedMask",
+      "width": "2",
+      "format": "decimal, one of 00 01 03 07 15 31",
+      "notes": ""
+    },
+    {
+      "name": "stage1Ticks",
+      "width": "7",
+      "format": "decimal, 0..9999999; positive for cleared stages, zero for future stages",
+      "notes": ""
+    },
+    {
+      "name": "stage2Ticks",
+      "width": "7",
+      "format": "decimal, 0..9999999; positive for cleared stages, zero for future stages",
+      "notes": ""
+    },
+    {
+      "name": "stage3Ticks",
+      "width": "7",
+      "format": "decimal, 0..9999999; positive for cleared stages, zero for future stages",
+      "notes": ""
+    },
+    {
+      "name": "stage4Ticks",
+      "width": "7",
+      "format": "decimal, 0..9999999; positive for cleared stages, zero for future stages",
+      "notes": ""
+    },
+    {
+      "name": "stage5Ticks",
+      "width": "7",
+      "format": "decimal, 0..9999999; positive for cleared stages, zero for future stages",
+      "notes": ""
+    },
+    {
+      "name": "checksum",
+      "width": "4",
+      "format": "uppercase hexadecimal",
+      "notes": ""
+    }
+  ],
+  "totalLength": "72",
+  "sortField": "score",
+  "sortDirection": "desc",
+  "scorecardFormula": "Score=min(999999, sourcePoints + sum(stage-clear bonuses)). For completed stage i, bonus=max(0,budget[i]-floor(stageTicks[i]*20/1199))*100; budgets in seconds=[480,300,60,180,720]. Uncleared stage has zero bonus. totalTicks=sum(stage1Ticks..stage5Ticks). Mask must be consecutive cleared stages (0,1,3,7,15,31). Validate score by recomputing it. Rank score descending; exact scores tie.",
+  "examplePayloads": [
+    "NGPC-DEV.COM/BATMAN/BATMAN2ABZ0002020000202000004560000004560000000000000000000000000000098C",
+    "NGPC-DEV.COM/BATMAN/BATMAN2BOB0036400000340000102000100090000001200000000000000000000000E70B",
+    "NGPC-DEV.COM/BATMAN/BATMAN2END01657000045000003200031000900000060000002000000300000120002D0A",
+    "NGPC-DEV.COM/BATMAN/BATMAN2MAX09999990999999999999900999999900000000000000000000000000006151"
+  ],
+  "otherNotes": "M64 retains M63 format 2 unchanged. M63 format 2 replaces M62 format 1. Full text92 chars with NGPC-DEV.COM/BATMAN/ prefix20. Positive eligible game-over, manual-save or stage-clear records are valid; full game completion is not required. Cheat unlocking disqualifies the whole boot; cheated saves stay unranked. Starts>3 lives unranked. CRC16/CCITT-FALSE, poly1021,initFFFF,unreflected,xorout0, over payload offsets0..67 then ASCII salt BATMAN63; append4hex at68..71. Server must validate formula, bounds, progress and split sum. First example is an actual target-rendered forced-game-over test fixture (2020 points,456 ticks); remaining examples are synthetic parser vectors. These are integration test data, not played scores. No live score/site configuration has been submitted. M65 adds version3 stage QRs while preserving this original version2 overall payload and scoreboard. Stage bests are independent across eligible cleared runs. User must submit the new stage schema to ngpc-dev.com site owner; it is not yet supported/accepted by the website.",
+  "additionalPayloadFormats": [
+    {
+      "name": "Individual stage high score",
+      "gameCode": "BATMAN",
+      "version": 3,
+      "scope": "per-stage",
+      "qrPrefix": "NGPC-DEV.COM/BATMAN/",
+      "payloadLength": 36,
+      "totalLength": 56,
+      "payloadFields": [
+        {
+          "name": "gameCode",
+          "offset": 0,
+          "width": 6,
+          "format": "fixed BATMAN"
+        },
+        {
+          "name": "version",
+          "offset": 6,
+          "width": 1,
+          "format": "fixed 3"
+        },
+        {
+          "name": "initials",
+          "offset": 7,
+          "width": 3,
+          "format": "A-Z"
+        },
+        {
+          "name": "stage",
+          "offset": 10,
+          "width": 1,
+          "format": "1..5"
+        },
+        {
+          "name": "score",
+          "offset": 11,
+          "width": 7,
+          "format": "zero-padded decimal 1..999999"
+        },
+        {
+          "name": "sourcePoints",
+          "offset": 18,
+          "width": 7,
+          "format": "zero-padded decimal 0..999999; earned during THIS cleared stage only"
+        },
+        {
+          "name": "stageTicks",
+          "offset": 25,
+          "width": 7,
+          "format": "zero-padded decimal 1..9999999; active-display refresh ticks during this stage"
+        },
+        {
+          "name": "checksum",
+          "offset": 32,
+          "width": 4,
+          "format": "uppercase CRC16/CCITT-FALSE hex"
+        }
+      ],
+      "sortField": "score",
+      "sortDirection": "desc",
+      "rankBy": "stage-separated leaderboards (1..5)",
+      "scorecardFormula": "For stage i, score=min(999999, sourcePoints + max(0,budget[i]-floor(stageTicks*20/1199))*100); budgetsSeconds=[480,300,60,180,720]; require stageTicks>0 and 1<=score<=999999. Rank descending by score within stage; exact scores tie. Use stageTicks as a local best tie-break only; server may retain score ties.",
+      "checksum": "CRC16/CCITT-FALSE poly1021 initFFFF no reflection xorout0, ASCII bytes payload offsets0..31 followed by ASCII salt BATMAN65, append 4 uppercase hex digits at 32..35; URL prefix excluded.",
+      "eligibility": "Valid stage-clear only, earned during an eligible run that started with <=3 lives; cheat unlocking disqualifies the boot. On-device rejects score0. Cannot independently authenticate legitimacy with checksum.",
+      "examplePayloads": [
+        "NGPC-DEV.COM/BATMAN/BATMAN3ABZ10049320000202000004562800",
+        "NGPC-DEV.COM/BATMAN/BATMAN3BOB2001840000034000009000B597",
+        "NGPC-DEV.COM/BATMAN/BATMAN3END3000400000000000001200E86C",
+        "NGPC-DEV.COM/BATMAN/BATMAN3MAX5099999909999999999999464E"
+      ],
+      "notes": "NEW M65 category; server/operator must explicitly support stage version3 and five stage scoreboards. Not a live submission or registration."
+    }
+  ]
+}

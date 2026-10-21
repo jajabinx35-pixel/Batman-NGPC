@@ -1,0 +1,14 @@
+{
+  "normal": {
+    "kind": "normal",
+    "file": "Batman_M66_Anti_Farming_Normal_4MB.ngc",
+    "bytes": 4194304,
+    "sha256": "f3068e05f59ca1c538e471d3679b12ca901936ddb1f9ccad56f5b12a94552858"
+  },
+  "diagnostic": {
+    "kind": "diagnostic",
+    "file": "Batman_M66_Anti_Farming_Diagnostic_4MB.ngc",
+    "bytes": 4194304,
+    "sha256": "18ac92304507cea431f5e6f8c2e9c3a1f912fa7e18980a64ca8dc22b2c45e695"
+  }
+}
