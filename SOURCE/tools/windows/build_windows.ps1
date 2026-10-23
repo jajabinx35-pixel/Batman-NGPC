@@ -74,7 +74,7 @@ try {
     $lock = [IO.File]::Open((Join-Path $root '.windows-build.lock'), [IO.FileMode]::OpenOrCreate, [IO.FileAccess]::ReadWrite, [IO.FileShare]::None)
     $logWriter = New-Object IO.StreamWriter((Join-Path $root 'WINDOWS_BUILD_LOG.txt'), $false)
     $logWriter.AutoFlush = $true
-    Note 'BATMAN M66: clean build from current source'
+    Note 'BATMAN V102: clean build from current source'
     $manifest = Get-Content -LiteralPath (Join-Path $source 'tools/build_sources.json') -Raw | ConvertFrom-Json
     $allSources = @($manifest.c) + @($manifest.asm) + @($manifest.library_asm)
     $stems = @($allSources | ForEach-Object { [IO.Path]::GetFileNameWithoutExtension($_).ToLowerInvariant() })
@@ -88,7 +88,7 @@ try {
         if (-not (Test-Path -LiteralPath (Join-Path $source ('game/' + $path)) -PathType Leaf)) { throw ('Missing source: ' + $path) }
     }
     Add-Type -Path (Join-Path $PSScriptRoot 'S24ToRom.cs')
-    $work = Join-Path ([IO.Path]::GetTempPath()) ('BatmanBuild_M66_' + [Guid]::NewGuid().ToString('N'))
+    $work = Join-Path ([IO.Path]::GetTempPath()) ('BatmanBuild_V102_' + [Guid]::NewGuid().ToString('N'))
     New-Item -ItemType Directory -Path $work | Out-Null
     $sdkSource = Join-Path $source 'T900'
     if (-not $isNativeWindows) { $sdkSource = [IO.Path]::GetFullPath($PreparedSdk) }
@@ -122,7 +122,7 @@ try {
         $flags = @('-A','-c','-O3','-Nb2','-Isrc','-Ivendor/ngpc/core','-Ivendor/ngpc/gfx',
             '-DNGP_ENABLE_DEBUG=0','-DNGP_PROFILE_RELEASE=1','-DNGP_ENABLE_SOUND=0',
             '-DNGP_ENABLE_FLASH_SAVE=0','-DNGP_NEAR=__near')
-        if ($label -eq 'diagnostic') { $flags += @('-DHW_PERF=1','-DHW_PERF_VERSION=66') }
+        if ($label -eq 'diagnostic') { $flags += @('-DHW_PERF=1','-DHW_PERF_VERSION=68') }
         $objects = @()
         foreach ($path in @($manifest.c)) {
             $obj = 'build/' + [IO.Path]::GetFileNameWithoutExtension($path) + '.rel'
@@ -141,8 +141,8 @@ try {
         if (@(Get-ChildItem -LiteralPath $game | Where-Object { $_.Name -match '^batman\.o[0-9a-f]{2}$' }).Count) {
             throw 'Converter emitted split overlays: invalid cartridge load images'
         }
-        $name = 'Batman_M66_Anti_Farming_Normal_4MB.ngc'
-        if ($label -eq 'diagnostic') { $name = 'Batman_M66_Anti_Farming_Diagnostic_4MB.ngc' }
+        $name = 'Batman_V1.0.2.ngc'
+        if ($label -eq 'diagnostic') { $name = 'Batman_V1.0.2_Diags.ngc' }
         $staged = Join-Path $work $name
         $edgeSource = [IO.File]::ReadAllText((Join-Path $game 'src/vehicle_edge_pixels_all.asm'))
         $hash = [BatmanRom]::Convert((Join-Path $game 'batman.s24'), (Join-Path $game 'batman.map'), $staged, $edgeSource.Contains('chg 0,l'))

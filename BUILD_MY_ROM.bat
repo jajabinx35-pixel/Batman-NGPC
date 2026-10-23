@@ -6,7 +6,7 @@ pushd "%~dp0"
 if errorlevel 1 exit /b 1
 where powershell.exe >nul 2>&1
 if errorlevel 1 goto missing_powershell
-echo Batman M66 - building the normal and hardware diagnostic ROMs.
+echo Batman V1.0.2 - building the normal and hardware diagnostic ROMs.
 echo This can take several minutes. A full log is saved to WINDOWS_BUILD_LOG.txt.
 powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File "%~dp0SOURCE\tools\windows\build_windows.ps1"
 set "BUILD_RESULT=%errorlevel%"

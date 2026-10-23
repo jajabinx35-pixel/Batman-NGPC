@@ -71,7 +71,9 @@ static u8 rope_old_count;
 static u8 rope_new_count;
 
 static void tile_load(u16 id,const u16 *p){graphics_diff_words(0xa000ul+(u32)id*16ul,(u32)p,8ul);video_tile_writes++;}
+#pragma section code platform_scan
 #include "platform_residency.inc"
+#pragma section code f_code
 static void setpal(u8 plane,const u16 *p){u8 i;for(i=0;i<16;i++)ngpc_gfx_set_palette(plane,i,p[i*4],p[i*4+1],p[i*4+2],p[i*4+3]);}
 static void ui_palettes(void){
  ngpc_gfx_set_palette(0,15,0,RGB(13,13,14),RGB(0,0,0),RGB(15,11,2));
@@ -159,6 +161,7 @@ void video_controls(u8 audio_on){
  ngpc_gfx_set_viewport(0,0,160,152);
 }
 void video_credits(void){video_credits_page(0);}
+#pragma section code platform_scan
 static void map_put(s16 wx,s16 wy){
  u8 cell=0,pal=0;
  if(active_stage==5){
@@ -188,6 +191,7 @@ static void camera_update(u8 full){
  }
 
 }
+#pragma section code f_code
 static void hud_palettes(void){
  ngpc_gfx_set_palette(0,15,0,RGB(0,0,0),RGB(6,7,8),RGB(15,15,15));
  ngpc_gfx_set_palette(0,14,0,RGB(13,13,14),RGB(0,0,0),RGB(15,11,0));
@@ -318,6 +322,7 @@ void video_start_game(void){
  else camera_update(1);
  hud_update();hud_commit();bitmap_first=(u8)(active_stage>=2&&active_stage<=4);if(!bitmap_first)ngpc_gfx_set_viewport(0,0,160,152);
 }
+#pragma section code f_code
 static void rope_draw(void){
  Player *p=&game.player;s16 x,y,endx,endy,dx,dy,sx,sy,err,e2,cx,cy,lastx=-100,lasty=-100;
  u8 count=0,i,j;u16 bit;
@@ -349,13 +354,13 @@ static void rope_draw(void){
  }
  rope_new_count=count;
 }
+#pragma section code f_code
 u8 video_bitmap_available(void){return !present_ready;}
 void video_bitmap_publish(void){hud_update();pending_game_tick=game.ticks;present_ready=1;}
-void video_game(void){
+#pragma section code platform_scan
+static void platform_render_frame(void){
  const SpriteFrame *f;const SpriteTile *t;BobDraw *b;
  u8 i,j,flip,bright;u16 tile_id,cache,at; s16 x,y;
- while(present_ready)ngpc_vsync();
- if(active_stage>=2&&active_stage<=4){if(active_stage==3)puzzle_draw();bitmap_prepare();return;}
  resident_platform_begin();
  if(active_stage==5&&cat_map_take_dirty())camera_update(1);else camera_update(0);video_sprite_count=0;
  for(i=0;i<bob_draw_count;i++){
@@ -383,6 +388,12 @@ void video_game(void){
  /* Publish a complete, immutable descriptor set. VBlank presents it while
     main is free to execute the next source update instead of busy-waiting. */
  hud_update();pending_game_tick=game.ticks;present_ready=1;
+}
+#pragma section code f_code
+void video_game(void){
+ while(present_ready)ngpc_vsync();
+ if(active_stage>=2&&active_stage<=4){if(active_stage==3)puzzle_draw();bitmap_prepare();return;}
+ platform_render_frame();
 }
 void video_present(void){
  u16 i;

@@ -1361,6 +1361,8 @@ d[7]=v;
 goto L3eec;
 L3eec: /* move.w (A6), D6 */
 VSTEP(0x3eecul);
+tv=platform_actor_enter(0x39c8u,1246u);
+if(tv==1u)goto L3f48;if(tv==2u)goto L3fb0;
 ea=a[6];
 tv=(ea>=0x39c8ul&&ea<0x3aa4ul)?dm_be16((const u8 DM_NEAR *)(vm_actors+(u16)(ea-0x39c8ul))):vr16(ea);
 VWORD(d[6])=(u16)(tv);
@@ -4340,6 +4342,7 @@ vw16(ea+4,d[4]);
 goto L45ae;
 L45ae: /* movem.w D0-D1/A5-A6, -(A7) */
 VSTEP(0x45aeul);
+if(platform_actor_draw(0x45b6u,0u))goto L45ba;
 if(platform_draw_push())goto L45b2;
 a[7]-=2;
 vw16(a[7],a[6]);
@@ -4377,6 +4380,7 @@ VWORD(d[2])=(u16)(tr);
 goto L45c0;
 L45c0: /* movem.w D0-D1/A5-A6, -(A7) */
 VSTEP(0x45c0ul);
+if(platform_actor_draw(0x45c8u,0u))goto L45cc;
 if(platform_draw_push())goto L45c4;
 a[7]-=2;
 vw16(a[7],a[6]);
@@ -5191,6 +5195,7 @@ vw16(ea+2,d[1]);
 goto L477e;
 L477e: /* lea $3a8e.w, A4 */
 VSTEP(0x477eul);
+if(platform_projectile_actors(0x39c8u))goto L47ae;goto L47ac;
 a[4]=0x3a8eul;
 goto L4782;
 L4782: /* moveq #$9, D6 */

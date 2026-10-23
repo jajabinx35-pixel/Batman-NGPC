@@ -51,7 +51,7 @@ sections
     RAM_CLEAR org=org(GRAPHICS_DIFF)+sizeof(GRAPHICS_DIFF) addr=0x77c0 : {*(RAM_CLEAR)}
     __ClearROM_START=org(RAM_CLEAR); __ClearROM_END=org(RAM_CLEAR)+sizeof(RAM_CLEAR);
     ROM_ASM org=org(RAM_CLEAR)+sizeof(RAM_CLEAR) : {
-        *(FLASH) *(SYSPATCH) *(SPEED) *(ROWS) *(STAMP) *(ROAD_NATIVE) *(FRAME_STAMP) *(EDGE_PROFILE) *(MIDPOINT_ROWS) *(VEHICLE_ROWS) *(BACKGROUND_ROWS)
+        *(FLASH) *(SYSPATCH) *(SPEED) *(ROWS) *(STAMP) *(ROAD_NATIVE) *(FRAME_STAMP) *(EDGE_PROFILE) *(VEHICLE_ROWS) *(BACKGROUND_ROWS)
     }
 
 
@@ -59,6 +59,11 @@ sections
     __PlatformScanROM_START=org(PLATFORM_SCAN); __PlatformScanROM_END=org(PLATFORM_SCAN)+sizeof(PLATFORM_SCAN);
     NATIVE_KERNEL org=org(PLATFORM_SCAN)+sizeof(PLATFORM_SCAN) addr=_render_work+4544 (OVERLAY) : {*(EDGE_PIXELS) *(EDGE_ALL)}
     __NativeKernelROM_START=org(NATIVE_KERNEL); __NativeKernelROM_END=org(NATIVE_KERNEL)+sizeof(NATIVE_KERNEL);
+    /* Compact stage-local tile identities free 676 bytes without changing
+       the outer RenderWork/save layout. Only vehicle stages install this. */
+    NATIVE_ROAD org=org(NATIVE_KERNEL)+sizeof(NATIVE_KERNEL)
+                addr=_render_work+5892 (OVERLAY) : {*(MIDPOINT_ROWS) *(NATIVE_ROAD)}
+    __NativeRoadROM_START=org(NATIVE_ROAD); __NativeRoadROM_END=org(NATIVE_ROAD)+sizeof(NATIVE_ROAD);
     sound_const org=0x800000 : {*(sound_const)}
     intro_audio org=org(sound_const)+sizeof(sound_const) : {*(intro_audio)}
 

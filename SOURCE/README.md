@@ -1,3 +1,7 @@
-# NGPC port source
+# Batman NGPC v1.0.2 source
 
-`game/` contains the current M66 port implementation and `tools/` contains the original project scripts. The bundled vintage Toshiba toolchain, executables for Wibo compatibility and test-evidence data have been left out of this public GitHub package. For Windows setup see `../BUILDING.md`. `tools/build_final.py` on Linux may require external `linux_runner` and a compatible emulator runner; it is not a dependency-free build. Release ROMs and their hashes are available separately under GitHub Releases.
+The NGPC port is in `game/`, build scripts are in `tools/`. The repo intentionally excludes Toshiba TLCS-900 tools and legacy Windows/Linux compatibility executables, which are independently licensed.
+
+For Windows, provide your properly licensed Toshiba compiler in `SOURCE/T900/` and run `BUILD_MY_ROM.bat` from the repository root. For Linux, see BUILDING.md for the additional runner requirement.
+
+Prebuilt ROMs are distributed separately under GitHub Releases. For the accepted v1.0.2 hashes see `../DOCUMENTATION/FINAL_ROM_IDENTITIES.json`.

@@ -91,9 +91,11 @@ for section,limit in [('PCM_NATIVE',0x1f0),('FAST_AXIS',448),('FAST_CAT',448),('
  sizes=re.findall(r'\b'+section+r'\s+CODE\s+[0-9A-F]+\s+([0-9A-F]+)\s+'+section+r'\(',mp)
  if sizes:assert len(sizes)==1 and int(sizes[0],16)<=limit,section+' exceeds reserved RAM'
 scan_size=link_values['__PlatformScanROM_END']-link_values['__PlatformScanROM_START']
-assert 0<scan_size<=6280-2560,'Platform scan kernel exceeds unused platform render tail'
+assert 0<scan_size<=6568-2560,'Platform scan kernel exceeds unused platform render tail'
 native_size=link_values['__NativeKernelROM_END']-link_values['__NativeKernelROM_START']
 assert 0<native_size<=400,'Native edge kernels exceed the unused vehicle map window'
+road_size=link_values['__NativeRoadROM_END']-link_values['__NativeRoadROM_START']
+assert 0<road_size<=676,'Native road kernel exceeds compact-cache tail'
 out=p/'OUTPUT'/(a.output_name or (('Batman_M%d_HARDWARE_DIAG_4MB.ngc' if a.diagnostic else 'Batman_The_Movie_NGPC_M%d_4MB.ngc') % a.version));out.parent.mkdir(parents=True,exist_ok=True);out.write_bytes(rom)
 for n in ['batman.abs','batman.s24','batman.map']:shutil.copy(g/n,evidence/n)
 print('BUILT',out,'SHA256',hashlib.sha256(rom).hexdigest(),flush=True)

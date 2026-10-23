@@ -5,9 +5,11 @@
 #include "game.h"
 #include <stddef.h>
 extern const u8 _NativeKernelROM_START,_NativeKernelROM_END;
+extern const u8 _NativeRoadROM_START,_NativeRoadROM_END;
+typedef char native_cache_tail_is_unused[(sizeof(NativeRender)==5892u && sizeof(RenderWork)==6568u)?1:-1];
 typedef char native_kernel_layout[(offsetof(NativeRender,map)==4544u)?1:-1];
 extern const u8 _PlatformScanROM_START,_PlatformScanROM_END;
-typedef char platform_scan_tail_is_unused[(sizeof(PlatformRender)<=2560u)?1:-1];
+typedef char platform_scan_tail_is_unused[(sizeof(PlatformRender)<=2560u && sizeof(RenderWork)==6568u)?1:-1];
 #ifndef VM_HOST
 extern const u8 _FastAxisROM_START,_FastAxisROM_END;
 extern const u8 _FastCatROM_START,_FastCatROM_END;
@@ -27,6 +29,6 @@ void stage_memory_init(u8 stage){const u8 *s,*end;u8 *dst=(u8 *)0x7600;
  else{s=&_FastVehROM_START;end=&_FastVehROM_END;}
  while(s<end)*dst++=*s++;
  if(stage==1u||stage==5u)copy_code(((u8 *)&render_work)+2560u,&_PlatformScanROM_START,&_PlatformScanROM_END);
- else if(stage==2u||stage==4u)copy_code(((u8 *)&render_work)+4544u,&_NativeKernelROM_START,&_NativeKernelROM_END);
+ else if(stage==2u||stage==4u){copy_code(((u8 *)&render_work)+4544u,&_NativeKernelROM_START,&_NativeKernelROM_END);copy_code(((u8 *)&render_work)+5892u,&_NativeRoadROM_START,&_NativeRoadROM_END);}
 }
 #endif

@@ -42,7 +42,7 @@ typedef struct {
  u8 oldx[32],oldy[32],newx[32],newy[32];u16 rope[32][8];PlatformResidency resident;
 } PlatformRender;
 typedef struct {u16 road[1600],patterns[512],descriptors[128],palettes[32],map[200];u16 skyx; s16 skyy;NativeResidency resident;} NativeRender;
-typedef union {PlatformRender platform;NativeRender native;u8 reserved[6280];} RenderWork;
+typedef union {PlatformRender platform;NativeRender native;u8 reserved[6568];} RenderWork;
 extern RenderWork render_work;
 #define bob_draws (render_work.platform.bobs)
 extern u8 bob_draw_count,vm_wait,vm_phase;

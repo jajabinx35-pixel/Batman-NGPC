@@ -1,0 +1,57 @@
+{
+  "gameName": "Batman: The Movie NGPC \u2014 Stage High Scores",
+  "gameCode": "BATMAN",
+  "payloadFields": [
+    {
+      "name": "gameCode",
+      "width": 6,
+      "format": "fixed BATMAN"
+    },
+    {
+      "name": "version",
+      "width": 1,
+      "format": "fixed 3"
+    },
+    {
+      "name": "initials",
+      "width": 3,
+      "format": "A-Z"
+    },
+    {
+      "name": "stage",
+      "width": 1,
+      "format": "1..5"
+    },
+    {
+      "name": "score",
+      "width": 7,
+      "format": "zero-padded decimal 1..999999"
+    },
+    {
+      "name": "sourcePoints",
+      "width": 7,
+      "format": "zero-padded decimal 0..999999; earned during THIS cleared stage only"
+    },
+    {
+      "name": "stageTicks",
+      "width": 7,
+      "format": "zero-padded decimal 1..9999999; active-display refresh ticks during this stage"
+    },
+    {
+      "name": "checksum",
+      "width": 4,
+      "format": "uppercase CRC16/CCITT-FALSE hex"
+    }
+  ],
+  "totalLength": "36",
+  "sortField": "score",
+  "sortDirection": "desc",
+  "scorecardFormula": "For stage i, score=min(999999, sourcePoints + max(0,budget[i]-floor(stageTicks*20/1199))*100); budgetsSeconds=[480,300,60,180,720]; require stageTicks>0 and 1<=score<=999999. Rank descending by score within stage; exact scores tie. Use stageTicks as a local best tie-break only; server may retain score ties.",
+  "examplePayloads": [
+    "NGPC-DEV.COM/BATMAN/BATMAN3ABZ10049320000202000004562800",
+    "NGPC-DEV.COM/BATMAN/BATMAN3BOB2001840000034000009000B597",
+    "NGPC-DEV.COM/BATMAN/BATMAN3END3000400000000000001200E86C",
+    "NGPC-DEV.COM/BATMAN/BATMAN3MAX5099999909999999999999464E"
+  ],
+  "otherNotes": "CRC16/CCITT-FALSE poly1021 initFFFF no reflection xorout0, ASCII bytes payload offsets0..31 followed by ASCII salt BATMAN65, append 4 uppercase hex digits at 32..35; URL prefix excluded. Valid stage-clear only, earned during an eligible run that started with <=3 lives; cheat unlocking disqualifies the boot. On-device rejects score0. Full QR URL has 20-character prefix and 36-character stage payload (total 56). Stages must be segregated for ranking. Overall version2 QR is separately defined in BATMAN_Leaderboard_Submission.json. Checksum validates data integrity and does not independently authenticate score legitimacy."
+}

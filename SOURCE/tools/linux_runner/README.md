@@ -1,19 +1,9 @@
-# Legacy Toshiba PE preparation
+# Legacy Linux/WSL toolchain runner
 
-The included `../wibo-compat` is the same pinned runner used for the accepted
-M61 baseline. It already contains the previously documented Windows-path shim
-(`path_compat.s`). Its SHA-256 is checked before every build. Upstream is Wibo
-1.2.0: https://github.com/decompals/wibo/releases/tag/1.2.0.
+The historical development build used Wibo 1.2.0 with a project-specific Windows-path shim, plus a separately licensed Toshiba TLCS-900 toolchain. Those compiled executables and the Toshiba SDK are **not included** in this public GitHub package.
 
-`prepare_runner.py` restores the original full-package SDK preparation. It
-copies `T900/` to a project-specific temporary directory and maps each PE file's
-headers with a read-only `.hdr` section. The original tools are untouched.
-The transformation matches the earlier preparation script exactly.
+The source/scripts are retained for reference; do not expect `tools/build_final.py` or `prepare_runner.py` to succeed on a fresh checkout without providing compatible lawful dependencies.
 
-Run `python3 tools/build_final.py --clean --verify-release` from the project root.
-Both normal and diagnostic builds prepare the SDK automatically. The standalone
-preparer is optional and uses the same compiler lock:
+Wibo upstream: https://github.com/decompals/wibo/releases/tag/1.2.0
 
-```sh
-python3 tools/linux_runner/prepare_runner.py
-```
+For native Windows builds with a lawfully obtained Toshiba toolchain see the repository's `BUILDING.md`.

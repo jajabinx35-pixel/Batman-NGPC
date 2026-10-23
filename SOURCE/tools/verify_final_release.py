@@ -1,4 +1,4 @@
-"""Verify an extracted M64 package, including both playable ROMs and source."""
+"""Verify an extracted V1.0.2 package, including both playable ROMs and source."""
 from pathlib import Path
 import hashlib,json
 P=Path(__file__).resolve().parents[2];manifest=P/'SHA256SUMS.txt';count=0

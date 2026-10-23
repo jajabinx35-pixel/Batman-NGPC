@@ -21,6 +21,10 @@ $MAXIMUM
         extern _stage_work
         extern _stack
         extern .vr8_slow
+        extern .platform_axis_rom8
+        extern .platform_cat_rom8
+        extern .platform_axis_rom16
+        extern .platform_cat_rom16
         extern .vr16_slow
         extern .vr32_slow
         extern .vw8_slow
@@ -46,12 +50,12 @@ $MAXIMUM
 FAST_AXIS section code large
 .vr8:
         call v_mutable
-        jp c,.vr8_slow
+        jp c,.platform_axis_rom8
         ld l,(xde)
         ret
 .vr16:
         call v_mutable
-        jp c,.vr16_slow
+        jp c,.platform_axis_rom16
         ld hl,(xde)
         ex l,h
         ret
@@ -149,12 +153,12 @@ v_miss:
 FAST_CAT section code large
 .cvr8:
         call cv_mutable
-        jp c,.cvr8_slow
+        jp c,.platform_cat_rom8
         ld l,(xde)
         ret
 .cvr16:
         call cv_mutable
-        jp c,.cvr16_slow
+        jp c,.platform_cat_rom16
         ld hl,(xde)
         ex l,h
         ret

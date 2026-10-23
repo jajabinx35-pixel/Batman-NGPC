@@ -13,7 +13,11 @@ static void perf_background(void){present_ready=0;ngpc_gfx_set_viewport(0,0,0,0)
  ngpc_gfx_fill_rect(0,0,0,20,19,SOLID_TILE,15);ngpc_gfx_set_viewport(0,0,160,152);
 }
 static void perf_heading(void){
-#if HW_PERF_VERSION==13
+#if HW_PERF_VERSION==68
+ centered(0,"V1.0.2 HARDWARE PERF",14);
+#elif HW_PERF_VERSION==67
+ centered(0,"V1.0.1 HARDWARE PERF",14);
+#elif HW_PERF_VERSION==13
  centered(0,"M13 CONTROL PERF",14);
 #elif HW_PERF_VERSION==31
  centered(0,"M54 CLEAR PERF",14);

@@ -87,7 +87,7 @@ void video_stage_intro(void){session_page();
 }
 void video_credits_page(u8 page){session_page();
  if(!page){centered(0,"ORIGINAL CREDITS",14);centered(2,"CODING BY",15);centered(3,"MIKE LAMB",14);centered(4,"JOBBEEEE",14);centered(5,"SHORTY",14);centered(7,"GRAPHICS BY",15);centered(8,"DAWN DRAKE",14);centered(9,"BILL HARBISON",14);centered(10,"JOHN PALMER",14);centered(12,"MUSIC AND FX BY",15);centered(13,"JON DUNN",14);centered(14,"MATTHEW CANNON",14);centered(16,"PORTED BY",15);centered(17,"JAJABINX35",14);}
- else{centered(2,"BATMAN THE MOVIE",14);centered(4,"DC COMICS INC. 1989",15);centered(6,"OCEAN SOFTWARE 1989",15);centered(9,"REVERSE ENGINEERING",15);centered(11,"MARKYTURTLE",14);centered(14,"PORTED BY",15);centered(16,"JAJABINX35",14);}
+ else{centered(0,"BATMAN THE MOVIE",14);centered(2,"DC COMICS INC. 1989",15);centered(4,"OCEAN SOFTWARE 1989",15);centered(6,"REVERSE ENGINEERING",15);centered(7,"MARKYTURTLE",14);centered(9,"PORTED BY",15);centered(10,"JAJABINX35",14);centered(12,"NGPC HIGH SCORE",15);centered(13,"MANAGEMENT",15);centered(15,"HARDHAT WARRIOR",14);centered(16,"WWW.NGPC-DEV.COM",15);}
  centered(18,"L/R PAGE   B: BACK",15);session_page_show();
 }
 

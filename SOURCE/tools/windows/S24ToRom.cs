@@ -68,8 +68,8 @@ public static class BatmanRom
             Match m = Regex.Match(map, @"_stage_work\s+([0-9A-F]{4,6})\s+f_area");
             Check(m.Success && System.Convert.ToInt32(m.Groups[1].Value, 16) % 2 == 0, "Unaligned stage_work");
         }
-        string[] names = { "Pcm", "Graphics", "Clear", "FastAxis", "FastCat", "FastVeh", "PlatformScan", "NativeKernel" };
-        int[] limits = { 496, 160, 64, 448, 448, 448, 3720, 400 };
+        string[] names = { "Pcm", "Graphics", "Clear", "FastAxis", "FastCat", "FastVeh", "PlatformScan", "NativeKernel", "NativeRoad" };
+        int[] limits = { 496, 160, 64, 448, 448, 448, 4008, 400, 676 };
         for (int i = 0; i < names.Length; ++i)
         {
             string start = "__" + names[i] + "ROM_START", end = "__" + names[i] + "ROM_END";

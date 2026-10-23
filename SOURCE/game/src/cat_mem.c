@@ -9,6 +9,9 @@ static u16 temp_scroll;static u8 panel_status[2];
 #define CAT_KEYS 104u
 #define CAT_VALUES 360u
 #define CAT_DIRTY 488u
+#ifndef VM_HOST
+#pragma section code platform_scan
+#endif
 u8 cat_map_read(u16 index){u8 slot,tries;u16 key;
  if(index>=17864u)return 0;
  slot=(u8)((index^(index>>7))&127u);
@@ -17,6 +20,9 @@ u8 cat_map_read(u16 index){u8 slot,tries;u16 key;
   if(key==index)return CAT_EXTRA[CAT_VALUES+slot];if(key==65535u)break;slot=(u8)((slot+1u)&127u);
  }return cathedral_map[index];
 }
+#ifndef VM_HOST
+#pragma section code f_code
+#endif
 static void cat_map_write(u16 index,u8 value){u8 slot,tries;u16 key;
  slot=(u8)((index^(index>>7))&127u);
  for(tries=0;tries<128;tries++){

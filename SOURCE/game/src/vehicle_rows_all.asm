@@ -45,7 +45,7 @@ _vehicle_road_rows:
         ld de,hl
         srl 8,xhl
         srl 8,xhl
-        jr road_rows_setup
+        jp road_rows_setup
 ; __adecl count in WA. Same raster body; avoid rebuilding four 32-bit
 ; C arguments and re-reading marker inputs in the generic wrapper.
 .vehicle_road_rows_fast:
@@ -72,8 +72,10 @@ road_fast_all_marks:
         res 0,iz
 road_fast_left_mark:
         bit 1,a
-        jr z,road_rows_setup
+        jp z,road_rows_setup
         res 4,iz
+        jp road_rows_setup
+NATIVE_ROAD section code large
 road_rows_setup:
         ld wa,de
         and wa,1
@@ -302,18 +304,20 @@ road_rows_advance:
         ld (xsp+2),wa
         lda xiy,xiy+4
         jp road_rows_draw
+VEHICLE_ROWS section code large
 road_rows_skip:
         ld wa,(xsp)
         dec 1,wa
         ld (xsp),wa
         cp wa,0
-        jr z,road_rows_done
+        jp z,road_rows_done
         ld wa,(xsp+2)
         dec 1,wa
         ld (xsp+2),wa
         lda xiy,xiy+4
         ld (xsp+4),xiy
         jp road_rows_start
+NATIVE_ROAD section code large
 road_rows_done:
         add xsp,12
 road_rows_return:
@@ -321,6 +325,7 @@ road_rows_return:
         pop xiy
         pop xix
         ret
+VEHICLE_ROWS section code large
 bulk_road_fill_table:
         dd bulk_road_fill_0,bulk_road_fill_1,bulk_road_fill_2,bulk_road_fill_3,bulk_road_fill_4,bulk_road_fill_5,bulk_road_fill_6,bulk_road_fill_7,bulk_road_fill_8,bulk_road_fill_9,bulk_road_fill_10,bulk_road_fill_11,bulk_road_fill_12,bulk_road_fill_13,bulk_road_fill_14,bulk_road_fill_15,bulk_road_fill_16,bulk_road_fill_17,bulk_road_fill_18
 bulk_road_left_masks:
