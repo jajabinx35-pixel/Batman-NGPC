@@ -33,7 +33,7 @@ The Earlier M66 scoring logic improves scoring fairness: after losing a life and
 
 | Stage high scores | QR score display |
 |:--:|:--:|
-| ![Stage records](screenshots/stage-high-scores.png) | ![QR code](screenshots/score-qr.png) |
+| ![Stage records](screenshots/stage-high-scores.png) | 
 
 Screenshots come from the project's bundled M65-era emulator test captures (160×152 pixels) and are shown enlarged 3× using nearest-neighbour scaling. The subsequent v1.0.2 work changes core processing, not these source graphics. These are not presented as freshly captured v1.0.2 hardware photographs. The QR image is an example test record, not a real leaderboard submission.
 
